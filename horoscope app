@@ -1,0 +1,13 @@
+/horoscope-slots-app
+    /assets
+        icons/
+        images/
+    /src
+        App.js
+        SlotMachine.js
+        BonusReel.js
+        Horoscope.js
+        SimpleSignup.js
+        firebaseConfig.js
+    package.json
+    README.md
