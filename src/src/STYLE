@@ -1,0 +1,35 @@
+body {
+    background: black;
+    color: gold;
+    text-align: center;
+    font-family: Arial;
+}
+
+h1 {
+    margin-top: 40px;
+}
+
+.slot-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.reel {
+    width: 120px;
+    height: 120px;
+    margin: 0 10px;
+    border: solid 3px gold;
+    border-radius: 10px;
+}
+
+button {
+    margin-top: 25px;
+    padding: 15px 30px;
+    font-size: 20px;
+    background: gold;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
