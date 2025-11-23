@@ -1,0 +1,10 @@
+1) Unzip horoscope_slots.zip to folder ./horoscope-slots
+2) Edit firebase-config.js with your Firebase values
+3) Test locally: python3 -m http.server 8000 → http://localhost:8000
+4) Create GitHub repo 'horoscope-slots'
+5) Upload all files via GitHub web UI (Add file → Upload files)
+6) Commit, then Settings → Pages → main branch → Save
+7) Open published URL → test signup & spin
+8) Record promo.html if you want a video
+9) Use PWABuilder to generate Android AAB for Play Store
+10) For App Store, use PWABuilder iOS wrapper and Xcode
