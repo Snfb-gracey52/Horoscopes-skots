@@ -1,0 +1,33 @@
+import { useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+
+export default function BonusReel({ onClose }) {
+  const [reward, setReward] = useState(null);
+
+  const spinBonus = () => {
+    const prizes = ["20 Coins", "40 Coins", "100 Coins", "Jackpot"];
+    setReward(prizes[Math.floor(Math.random()*prizes.length)]);
+  };
+
+  return (
+    <View style={{ padding:20 }}>
+      <Text style={{ fontSize:32 }}>BONUS REEL</Text>
+
+      {reward && <Text style={{ fontSize:26 }}>{reward}</Text>}
+
+      <TouchableOpacity
+        onPress={spinBonus}
+        style={{ backgroundColor:"#2ECC71", padding:20, marginTop:20 }}
+      >
+        <Text style={{ color:"#fff", textAlign:"center" }}>SPIN BONUS</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={onClose}
+        style={{ backgroundColor:"#555", padding:20, marginTop:20 }}
+      >
+        <Text style={{ color:"#fff", textAlign:"center" }}>Back</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
