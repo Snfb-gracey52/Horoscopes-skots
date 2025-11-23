@@ -1,0 +1,47 @@
+import os, zipfile
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+
+# Create website folder
+website_dir = "/mnt/data/horoscope_website"
+os.makedirs(website_dir, exist_ok=True)
+
+with open(os.path.join(website_dir, "index.html"), "w") as f:
+    f.write("<html><body><h1>Horoscope Slots</h1><p>Official website.</p></body></html>")
+
+# Zip the website
+website_zip = "/mnt/data/horoscope_website.zip"
+with zipfile.ZipFile(website_zip, "w") as z:
+    for root, dirs, files in os.walk(website_dir):
+        for file in files:
+            full = os.path.join(root, file)
+            z.write(full, os.path.relpath(full, website_dir))
+
+# Create PDF
+pdf_path = "/mnt/data/horoscope_full_instructions.pdf"
+styles = getSampleStyleSheet()
+doc = SimpleDocTemplate(pdf_path, pagesize=letter)
+story = [
+    Paragraph("Horoscope Slots Full Instructions", styles["Title"]),
+    Paragraph("1. Upload ZIP to GitHub.", styles["Normal"]),
+    Paragraph("2. Create repository.", styles["Normal"]),
+    Paragraph("3. Enable GitHub Pages.", styles["Normal"]),
+    Paragraph("4. Test and deploy.", styles["Normal"])
+]
+doc.build(story)
+
+# Create app folder and ZIP
+app_dir = "/mnt/data/horoscope_full_app"
+os.makedirs(app_dir, exist_ok=True)
+with open(os.path.join(app_dir, "index.html"), "w") as f:
+    f.write("<html><body><h1>Horoscope Slots App</h1></body></html>")
+
+app_zip = "/mnt/data/horoscope_full_app.zip"
+with zipfile.ZipFile(app_zip, "w") as z:
+    for root, dirs, files in os.walk(app_dir):
+        for file in files:
+            full = os.path.join(root, file)
+            z.write(full, os.path.relpath(full, app_dir))
+
+(website_zip, pdf_path, app_zip)
