@@ -1,0 +1,49 @@
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+import zipfile, os
+
+base = "/mnt/data/horoscope_slots"
+os.makedirs(base, exist_ok=True)
+
+files = {
+    "index.html": "<!DOCTYPE html><html><body><h1>Horoscope Slots 🔮</h1><p>App ready.</p></body></html>",
+    "style.css": "body {background:black;color:gold;}",
+    "slot.js": "console.log('slot logic');",
+    "signup.js": "console.log('signup');",
+    "README.md": "# Horoscope Slots",
+    "COPYRIGHT.txt": "SNFB BY Grace 2026-2027"
+}
+
+for name, content in files.items():
+    with open(os.path.join(base, name), "w") as f:
+        f.write(content)
+
+os.makedirs(os.path.join(base, "data"), exist_ok=True)
+with open(os.path.join(base, "data", "signs.json"), "w") as f:
+    f.write('{"aries":"Strong energy"}')
+
+website_dir = "/mnt/data/website"
+os.makedirs(website_dir, exist_ok=True)
+with open(os.path.join(website_dir, "index.html"), "w") as f:
+    f.write("<html><body><h1>Grace Horoscope Slots</h1><p>Welcome.</p></body></html>")
+
+zip_path = "/mnt/data/horoscope_slots.zip"
+with zipfile.ZipFile(zip_path, "w") as z:
+    for root, dirs, fs in os.walk(base):
+        for file in fs:
+            full = os.path.join(root, file)
+            z.write(full, os.path.relpath(full, base))
+
+pdf_path = "/mnt/data/horoscope_slots_instructions.pdf"
+styles = getSampleStyleSheet()
+doc = SimpleDocTemplate(pdf_path, pagesize=letter)
+story = [
+    Paragraph("Horoscope Slots Instructions", styles["Title"]),
+    Paragraph("1. Upload all files to GitHub.", styles["Normal"]),
+    Paragraph("2. Enable GitHub Pages.", styles["Normal"]),
+    Paragraph("3. Test and submit.", styles["Normal"])
+]
+doc.build(story)
+
+(zip_path, pdf_path, website_dir)
