@@ -1,0 +1,38 @@
+import { useState } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+
+const symbols = ["♈", "♉", "♊", "♋", "♌", "♍", "⭐", "💫"];
+
+export default function SlotMachine({ onBonus }) {
+  const [reels, setReels] = useState(["⭐","⭐","⭐"]);
+
+  const spin = () => {
+    const spinResult = [
+      symbols[Math.floor(Math.random()*symbols.length)],
+      symbols[Math.floor(Math.random()*symbols.length)],
+      symbols[Math.floor(Math.random()*symbols.length)]
+    ];
+    setReels(spinResult);
+
+    if (spinResult[0] === spinResult[1] && spinResult[1] === spinResult[2]) {
+      onBonus();
+    }
+  };
+
+  return (
+    <View style={{ padding:20 }}>
+      <Text style={{ fontSize:48, textAlign:"center" }}>
+        {reels.join("  ")}
+      </Text>
+
+      <TouchableOpacity
+        onPress={spin}
+        style={{ backgroundColor:"#8E44AD", padding:20, marginTop:20 }}
+      >
+        <Text style={{ color:"#fff", textAlign:"center", fontSize:20 }}>
+          SPIN
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
