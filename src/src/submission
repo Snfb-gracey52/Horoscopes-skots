@@ -1,0 +1,49 @@
+HOROSCOPE SLOTS — SIMPLE SETUP GUIDE
+© SNFB by Grace 2026-2027
+
+1. Create a GitHub account
+2. Create a New Repository → name: horoscope-slots
+3. Upload ALL files from the ZIP
+4. Go to Settings → Pages
+5. Enable GitHub Pages
+6. Your live app link appears
+
+OPTIONAL FIREBASE:
+1. Go to firebase.google.com
+2. Create project → Web App
+3. Enable Authentication → Anonymous
+4. Copy Firebase Config → paste into firebase-config.js
+
+TESTING:
+Open your GitHub Pages link on:
+- iPhone
+- Android
+- Laptop
+- Tablet
+
+OFFLINE READY:
+Your service-worker.js handles offline mode.
+
+GOOGLE PLAY SUBMISSION:
+1. Go to PWABuilder.com
+2. Enter your GitHub link
+3. Download Android AAB
+4. Upload to Google Play Console
+
+APPLE APP STORE:
+1. PWABuilder → iOS Package
+2. Upload using Xcode
+
+YouTube:
+Use promo.html to record promo video
+Upload to YouTube
+Replace videoId in app.js
+
+EDITING:
+You can edit:
+- Names
+- Icons
+- Colors
+- Text
+- Copyright
+Anytime, directly on GitHub.
