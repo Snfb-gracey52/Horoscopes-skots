@@ -1,0 +1,52 @@
+import os, zipfile
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase import pdfmetrics
+from PIL import Image, ImageDraw, ImageFont
+
+base = "/mnt/data/horoscope_final"
+os.makedirs(base, exist_ok=True)
+os.makedirs(f"{base}/icons", exist_ok=True)
+
+files = {
+"index.html": "<!doctype html><html><body>Horoscope Slots App</body></html>",
+"style.css": "body{background:#000;color:#fff;}",
+"slot.js": "console.log('slot loaded');",
+"signup.js": "console.log('signup loaded');",
+"manifest.json": '{"name":"Horoscope Slots"}',
+"privacy.html": "<html><body>Privacy</body></html>",
+"README.md": "Horoscope Slots App",
+"COPYRIGHT.txt": "© SNFB BY Grace 2026-2027"
+}
+
+for name, content in files.items():
+    with open(f"{base}/{name}", "w") as f:
+        f.write(content)
+
+# icons without emoji to avoid font errors
+for size in [192,512]:
+    img = Image.new("RGB",(size,size),"navy")
+    d=ImageDraw.Draw(img)
+    d.text((size//4,size//3),"HS",fill="yellow")
+    img.save(f"{base}/icons/icon-{size}.png")
+
+# PDF
+pdf_path="/mnt/data/Horoscope_Slots_Final_Instructions.pdf"
+pdfmetrics.registerFont(UnicodeCIDFont('HeiseiMin-W3'))
+styles=getSampleStyleSheet()
+doc=SimpleDocTemplate(pdf_path,pagesize=letter)
+story=[Paragraph("Horoscope Slots Final Instructions",styles["Title"]),
+       Paragraph("Upload files to GitHub.",styles["BodyText"])]
+doc.build(story)
+
+# Create ZIP
+zip_path="/mnt/data/Horoscope_Slots_Final_Package.zip"
+with zipfile.ZipFile(zip_path,"w") as z:
+    for root,dirs,files2 in os.walk(base):
+        for file in files2:
+            full=os.path.join(root,file)
+            z.write(full, os.path.relpath(full, base))
+
+(zip_path, pdf_path)
