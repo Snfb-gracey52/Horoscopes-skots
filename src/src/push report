@@ -1,0 +1,7 @@
+cd /path/to/horoscope-slots
+git init
+git add .
+git commit -m "Initial commit — Horoscope Slots © SNFB by Grace 2026-2027"
+git remote add origin https://github.com/YOUR_USERNAME/horoscope-slots.git
+git branch -M main
+git push -u origin main
