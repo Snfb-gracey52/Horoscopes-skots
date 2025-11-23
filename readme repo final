@@ -1,0 +1,16 @@
+# Horoscope Slots
+Simple horoscope-themed slot machine.  
+Quick local signup (no password), bonus reel, PWA manifest, and privacy policy.
+
+## How to run locally
+1. Unzip files into a folder.
+2. Open a terminal, run: `python3 -m http.server 8000`
+3. Visit `http://localhost:8000` in a browser.
+
+## Deploy to GitHub Pages
+1. Create a repo.
+2. Upload these files (Add file → Upload files OR Create new file and paste).
+3. Enable GitHub Pages (Settings → Pages → Branch: main, Root).
+4. Open published URL.
+
+© SNFB BY Grace 2026-2027
