@@ -1,0 +1,10 @@
+[ ] Live site URL works over HTTPS
+[ ] App functionality tested on phone and desktop
+[ ] Promo video recorded and uploaded to YouTube
+[ ] privacy.html (privacy policy) present in repo and published
+[ ] Icons: 192x192, 512x512 present
+[ ] Screenshots ready (phone 1080x1920 or similar)
+[ ] Manifest.json contains correct name and icons
+[ ] service-worker.js caches necessary assets
+[ ] firebase-config.js contains your Firebase config (if using)
+[ ] README and contact info in repo
