@@ -1,0 +1,75 @@
+import os, zipfile
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+
+# Base directories
+app_base = "/mnt/data/horoscope_app_github_ready"
+website_base = "/mnt/data/horoscope_website_ready"
+
+# Ensure directories exist
+os.makedirs(app_base, exist_ok=True)
+os.makedirs(os.path.join(app_base, "data"), exist_ok=True)
+os.makedirs(os.path.join(app_base, "assets"), exist_ok=True)
+os.makedirs(website_base, exist_ok=True)
+
+# App files
+app_files = {
+    "index.html": "<!DOCTYPE html><html><body><h1>Horoscope Slots 🔮</h1><p>GitHub Ready Version</p></body></html>",
+    "style.css": "body {background:black;color:gold;}",
+    "slot.js": "console.log('slot logic ready');",
+    "signup.js": "console.log('signup ready');",
+    "README.md": "# Horoscope Slots App (GitHub Ready)",
+    "COPYRIGHT.txt": "SNFB BY Grace 2026-2027"
+}
+
+for name, content in app_files.items():
+    with open(os.path.join(app_base, name), "w") as f:
+        f.write(content)
+
+# JSON Data
+with open(os.path.join(app_base, "data", "signs.json"), "w") as f:
+    f.write('{"aries":"Strong energy","taurus":"Grounded","leo":"Fire rising"}')
+
+# Placeholder images
+for img in ["reel1.png", "reel2.png", "reel3.png", "bonus.png", "star.png"]:
+    with open(os.path.join(app_base, "assets", img), "wb") as f:
+        f.write(b"\x89PNG\r\n\x1a\n")  # 1‑pixel placeholder PNG header
+
+# Website file
+with open(os.path.join(website_base, "index.html"), "w") as f:
+    f.write("<html><body><h1>Official Horoscope Slots Website</h1><p>Welcome.</p></body></html>")
+
+# ZIPs
+app_zip = "/mnt/data/Horoscope_Slots_App_GitHub_Ready.zip"
+website_zip = "/mnt/data/Horoscope_Slots_Website.zip"
+
+with zipfile.ZipFile(app_zip, "w") as z:
+    for root, dirs, files in os.walk(app_base):
+        for file in files:
+            full_path = os.path.join(root, file)
+            z.write(full_path, os.path.relpath(full_path, app_base))
+
+with zipfile.ZipFile(website_zip, "w") as z:
+    for root, dirs, files in os.walk(website_base):
+        for file in files:
+            full_path = os.path.join(root, file)
+            z.write(full_path, os.path.relpath(full_path, website_base))
+
+# PDF Instructions
+pdf_path = "/mnt/data/Horoscope_Slots_GitHub_Instructions.pdf"
+styles = getSampleStyleSheet()
+doc = SimpleDocTemplate(pdf_path, pagesize=letter)
+story = [
+    Paragraph("Horoscope Slots App — GitHub Upload Instructions", styles["Title"]),
+    Paragraph("1. Download the ZIP files.", styles["Normal"]),
+    Paragraph("2. Unzip them on your device.", styles["Normal"]),
+    Paragraph("3. Go to GitHub → Create Repository.", styles["Normal"]),
+    Paragraph("4. Click Add file → Upload files.", styles["Normal"]),
+    Paragraph("5. Drag all unzipped files into GitHub.", styles["Normal"]),
+    Paragraph("6. Commit changes.", styles["Normal"]),
+    Paragraph("7. Enable GitHub Pages for preview.", styles["Normal"]),
+]
+doc.build(story)
+
+(app_zip, website_zip, pdf_path)
