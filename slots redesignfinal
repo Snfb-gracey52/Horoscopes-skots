@@ -1,0 +1,25 @@
+const signs = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+const bonusIcons = ["⭐","💎","🔮","💰"];
+
+function spin() {
+  const r1 = signs[Math.floor(Math.random()*signs.length)];
+  const r2 = signs[Math.floor(Math.random()*signs.length)];
+  const r3 = signs[Math.floor(Math.random()*signs.length)];
+  document.getElementById('r1').textContent = r1;
+  document.getElementById('r2').textContent = r2;
+  document.getElementById('r3').textContent = r3;
+  document.getElementById('bonus').textContent = bonusIcons[Math.floor(Math.random()*bonusIcons.length)];
+
+  const result = document.getElementById('result');
+  if (r1===r2 && r2===r3) {
+    result.textContent = `💥 JACKPOT — ${r1} energy amplified!`;
+  } else {
+    result.textContent = `${r1} • ${r2} • ${r3} — Your daily vibe.`;
+  }
+}
+
+function bonusSpin() {
+  spin();
+  const r = document.getElementById('result');
+  r.textContent = '🔮 Bonus spin! ' + r.textContent;
+}
