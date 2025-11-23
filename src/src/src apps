@@ -1,0 +1,16 @@
+import { useState } from "react";
+import { View } from "react-native";
+import SimpleSignup from "./SimpleSignup";
+import SlotMachine from "./SlotMachine";
+import BonusReel from "./BonusReel";
+
+export default function App() {
+  const [email, setEmail] = useState(null);
+  const [showBonus, setShowBonus] = useState(false);
+
+  if (!email) return <SimpleSignup onSignup={(e)=>setEmail(e)} />;
+
+  if (showBonus) return <BonusReel onClose={()=>setShowBonus(false)} />;
+
+  return <SlotMachine onBonus={()=>setShowBonus(true)} />;
+}
