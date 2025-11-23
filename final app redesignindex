@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Horoscope Slots</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0d1226"/>
+</head>
+<body>
+  <main class="wrap">
+    <header><h1>Horoscope Slots 🔮</h1></header>
+
+    <section id="signupBox">
+      <label for="emailInput">Enter your name or email to play</label><br/>
+      <input id="emailInput" placeholder="Your name or email" />
+      <button onclick="quickSignup()">Start</button>
+      <p id="signupStatus" class="muted"></p>
+    </section>
+
+    <section id="gameBox" style="display:none">
+      <div class="slots">
+        <div class="reel" id="r1">—</div>
+        <div class="reel" id="r2">—</div>
+        <div class="reel" id="r3">—</div>
+        <div class="bonus" id="bonus">⭐</div>
+      </div>
+
+      <div class="controls">
+        <button id="spinBtn" onclick="spin()">SPIN</button>
+        <button id="bonusBtn" onclick="bonusSpin()">BONUS</button>
+      </div>
+
+      <div id="result" class="result">Ready to play.</div>
+    </section>
+
+    <footer>
+      <small>© SNFB BY Grace 2026-2027 — All Rights Reserved</small>
+      <br/>
+      <a href="privacy.html" target="_blank">Privacy Policy</a>
+    </footer>
+  </main>
+
+  <script src="signup.js"></script>
+  <script src="slot.js"></script>
+</body>
+</html>
