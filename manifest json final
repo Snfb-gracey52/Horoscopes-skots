@@ -1,0 +1,14 @@
+function quickSignup(){
+  const input = document.getElementById('emailInput');
+  const v = (input.value||'').trim();
+  if(!v){ document.getElementById('signupStatus').textContent = 'Please enter a name or email.'; return; }
+  // create an internal user id/email for app records:
+  const uid = 'user_' + Math.floor(Math.random()*999999);
+  const entry = { uid, name: v, createdAt: new Date().toISOString() };
+  // save locally (optional later push to DB)
+  localStorage.setItem('horoscope_user', JSON.stringify(entry));
+  document.getElementById('signupBox').style.display = 'none';
+  document.getElementById('gameBox').style.display = 'block';
+  document.getElementById('signupStatus').textContent = '';
+  document.getElementById('result').textContent = `Welcome, ${v}! Press SPIN to play.`;
+}
