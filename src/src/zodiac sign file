@@ -1,0 +1,17 @@
+const signs = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+const bonusIcons = ["⭐","💎","🔮","💰"];
+
+document.getElementById("spin").onclick = () => {
+    r1.textContent = signs[Math.floor(Math.random()*12)];
+    r2.textContent = signs[Math.floor(Math.random()*12)];
+    r3.textContent = signs[Math.floor(Math.random()*12)];
+    bonus.textContent = bonusIcons[Math.floor(Math.random()*bonusIcons.length)];
+
+    if (r1.textContent === r2.textContent && r2.textContent === r3.textContent) {
+        resultTitle.textContent = "JACKPOT!";
+        resultText.textContent = "Your horoscope energy is strong!";
+    } else {
+        resultTitle.textContent = "Your Daily Fortune";
+        resultText.textContent = "A wave of luck surrounds you.";
+    }
+};
