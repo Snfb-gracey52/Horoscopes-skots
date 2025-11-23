@@ -1,0 +1,90 @@
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
+import zipfile
+import os
+
+# Create PDF with admonitions
+pdf_path = "/mnt/data/AppStore_PlayStore_Preparation.pdf"
+styles = getSampleStyleSheet()
+story = []
+
+admonitions = [
+    ("⚠️ Important", "Double-check all branding assets before submitting to any store."),
+    ("💡 Tip", "Use consistent keywords across App Store, Play Store, and search engines."),
+    ("🛑 Warning", "Never upload test builds to public listings."),
+    ("📌 Note", "Both Apple and Google take 24–72 hours to review updates.")
+]
+
+story.append(Paragraph("App Store & Play Store Preparation Guide", styles['Title']))
+story.append(Spacer(1, 12))
+
+for title, text in admonitions:
+    story.append(Paragraph(f"<b>{title}</b>: {text}", styles['BodyText']))
+    story.append(Spacer(1, 10))
+
+sections = [
+    ("1. App Store (iOS) Checklist", [
+        "Create an Apple Developer account.",
+        "Archive your app with Xcode.",
+        "Upload via Xcode or Transporter.",
+        "Set metadata, screenshots, and keywords.",
+        "Submit for review."
+    ]),
+    ("2. Play Store (Android) Checklist", [
+        "Create a Google Play Developer account.",
+        "Bundle your app (.aab).",
+        "Upload to Google Play Console.",
+        "Set pricing, regions, screenshots, description.",
+        "Submit for review."
+    ]),
+    ("3. SEO Setup (Google, Bing, Yahoo)", [
+        "Create website sitemap.xml.",
+        "Submit sitemap to Google Search Console.",
+        "Add Bing Webmaster Tools.",
+        "Add Yahoo through Bing indexing.",
+        "Add keywords, meta-tags, structured data."
+    ]),
+    ("4. GoDaddy Hosting Prep", [
+        "Upload site files to hosting manager.",
+        "Point DNS to GoDaddy nameservers.",
+        "Enable SSL certificate.",
+        "Verify domain ownership in Google Search Console."
+    ])
+]
+
+for title, items in sections:
+    story.append(Paragraph(f"<b>{title}</b>", styles['Heading2']))
+    for item in items:
+        story.append(Paragraph(f"• {item}", styles['BodyText']))
+    story.append(Spacer(1, 12))
+
+doc = SimpleDocTemplate(pdf_path, pagesize=letter)
+doc.build(story)
+
+# Create ZIP with updated README including admonitions
+zip_path = "/mnt/data/Horoscope_Slots_Prepared_Release.zip"
+readme_content = """# Horoscope Slots App — Store-Ready Package
+
+## Admonitions
+⚠️ Important: Double-check all branding assets before submitting to any store.  
+💡 Tip: Use consistent keywords across App Store and Play Store.  
+🛑 Warning: Never upload internal builds to public listings.  
+📌 Note: Review time ranges from 1–3 days.
+
+## Included
+- SEO-ready README
+- Store submission checklists
+- Domain + hosting instructions
+"""
+
+readme_path = "/mnt/data/README.txt"
+with open(readme_path, "w") as f:
+    f.write(readme_content)
+
+with zipfile.ZipFile(zip_path, 'w') as z:
+    z.write(readme_path, "README.txt")
+
+zip_path, pdf_path
