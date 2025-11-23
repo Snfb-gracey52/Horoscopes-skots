@@ -1,0 +1,12 @@
+index.html
+style.css
+app.js
+signup.js
+firebase-config.js   ← replace the REPLACE_* values with your Firebase config (optional)
+manifest.json
+service-worker.js
+website.html         ← optional marketing page
+promo.html           ← promo animation you can record
+/icons/icon-192.png
+/icons/icon-512.png
+README_STEPS.txt
