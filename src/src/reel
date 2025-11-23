@@ -1,0 +1,28 @@
+const symbols = [
+    "assets/reel1.png",
+    "assets/reel2.png",
+    "assets/reel3.png"
+];
+
+function spin() {
+    document.getElementById("result").innerText = "";
+
+    let r1 = symbols[Math.floor(Math.random()*symbols.length)];
+    let r2 = symbols[Math.floor(Math.random()*symbols.length)];
+    let r3 = symbols[Math.floor(Math.random()*symbols.length)];
+
+    document.getElementById("reel1").src = r1;
+    document.getElementById("reel2").src = r2;
+    document.getElementById("reel3").src = r3;
+
+    if (r1 === r2 && r2 === r3) {
+        document.getElementById("result").innerText = "Jackpot!";
+    } else {
+        document.getElementById("result").innerText = "Try again!";
+    }
+}
+
+function bonusSpin() {
+    document.getElementById("result").innerText = "Bonus activated!";
+    spin();
+}
