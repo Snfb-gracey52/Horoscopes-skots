@@ -1,0 +1,61 @@
+import os, zipfile
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase import pdfmetrics
+
+base = "/mnt/data/horoscope_final"
+os.makedirs(base, exist_ok=True)
+os.makedirs(f"{base}/icons", exist_ok=True)
+
+# files
+files = {
+"index.html": """<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Horoscope Slots</title><link rel="stylesheet" href="style.css"/><link rel="manifest" href="manifest.json"/></head><body><main class="wrap"><header><h1>Horoscope Slots 🔮</h1></header><section id="signupBox"><label>Enter your name or email</label><br/><input id="emailInput"/><button onclick="quickSignup()">Start</button><p id="signupStatus"></p></section><section id="gameBox" style="display:none"><div class="slots"><div class="reel" id="r1">—</div><div class="reel" id="r2">—</div><div class="reel" id="r3">—</div><div class="bonus" id="bonus">⭐</div></div><div class="controls"><button onclick="spin()">SPIN</button><button onclick="bonusSpin()">BONUS</button></div><div id="result">Ready.</div></section><footer><small>© SNFB BY Grace 2026-2027</small><br/><a href="privacy.html">Privacy</a></footer></main><script src="signup.js"></script><script src="slot.js"></script></body></html>""",
+
+"style.css": ":root{--bg:#07122a;--accent:#ffd54f;}body{margin:0;font-family:Arial;background:#07122a;color:#fff;display:flex;justify-content:center;min-height:100vh}.wrap{padding:20px;max-width:720px}.reel,.bonus{width:80px;height:80px;background:#123;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:32px}",
+
+"slot.js": "const s=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];const b=['⭐','💎','🔮','💰'];function spin(){let r1=s[Math.random()*s.length|0],r2=s[Math.random()*s.length|0],r3=s[Math.random()*s.length|0];document.getElementById('r1').textContent=r1;document.getElementById('r2').textContent=r2;document.getElementById('r3').textContent=r3;document.getElementById('bonus').textContent=b[Math.random()*b.length|0];let res=document.getElementById('result');res.textContent=r1===r2&&r2===r3?'JACKPOT!':'Spin result.'}",
+
+"signup.js": "function quickSignup(){let v=document.getElementById('emailInput').value.trim();if(!v){document.getElementById('signupStatus').textContent='Enter something.';return;}localStorage.setItem('horoscope_user',JSON.stringify({v,created:Date()}));document.getElementById('signupBox').style.display='none';document.getElementById('gameBox').style.display='block';}",
+
+"manifest.json": '{"name":"Horoscope Slots","short_name":"Slots","start_url":"index.html","display":"standalone","background_color":"#07122a","theme_color":"#07122a","icons":[{"src":"icons/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icons/icon-512.png","sizes":"512x512","type":"image/png"}]}',
+
+"privacy.html": "<html><body><h2>Privacy</h2><p>© SNFB BY Grace 2026-2027</p><p>No passwords stored. Local data only.</p></body></html>",
+
+"README.md": "Horoscope Slots App\n\nRun locally: python3 -m http.server 8000\n\n© SNFB BY Grace 2026-2027",
+
+"COPYRIGHT.txt": "SNFB BY Grace © 2026-2027"
+}
+
+# write
+for name, content in files.items():
+    with open(f"{base}/{name}", "w") as f:
+        f.write(content)
+
+# placeholder icons
+from PIL import Image, ImageDraw
+for size in [192,512]:
+    img = Image.new("RGB",(size,size),"navy")
+    d=ImageDraw.Draw(img)
+    d.text((size//4,size//3),"⭐",fill="yellow")
+    img.save(f"{base}/icons/icon-{size}.png")
+
+# PDF
+pdf_path="/mnt/data/Horoscope_Slots_Final_Instructions.pdf"
+pdfmetrics.registerFont(UnicodeCIDFont('HeiseiMin-W3'))
+styles=getSampleStyleSheet()
+doc=SimpleDocTemplate(pdf_path,pagesize=letter)
+story=[Paragraph("Horoscope Slots Instructions<br/>© SNFB BY Grace 2026-2027",styles["Title"]),
+       Paragraph("1. Upload all files to GitHub root.<br/>2. Enable GitHub Pages.<br/>3. Open link to run app.<br/>4. Use PWABuilder for store submission.",styles["BodyText"])]
+doc.build(story)
+
+# ZIP
+zip_path="/mnt/data/Horoscope_Slots_Final_Package.zip"
+with zipfile.ZipFile(zip_path,"w") as z:
+    for root,dirs,files2 in os.walk(base):
+        for file in files2:
+            full=os.path.join(root,file)
+            z.write(full, os.path.relpath(full, base))
+
+zip_path, pdf_path
