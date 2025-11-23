@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Horoscope Slots</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --accent:#f59e0b;
+    --muted:#9aa4b2;
+    --glass: rgba(255,255,255,0.04);
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+  body{
+    background: radial-gradient( circle at 10% 10%, rgba(245,158,11,0.06), transparent 10%),
+                linear-gradient(180deg,#061023 0%, #07122a 100%);
+    color:#e6eef6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .app {
+    width:360px;
+    max-width:100%;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border:1px solid rgba(255,255,255,0.04);
+    border-radius:14px;
+    padding:18px;
+    box-shadow: 0 6px 30px rgba(2,6,23,0.7);
+  }
+
+  header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .logo {
+    width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#ef4444);
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#07122a;font-size:20px;
+  }
+  h1{font-size:16px;margin:0}
+  p.lead{margin:0;color:var(--muted);font-size:13px}
+
+  .slots {
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin:18px 0;
+  }
+
+  .reel {
+    width:88px;
+    height:120px;
+    background:var(--glass);
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.03);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .reel .strip{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition: transform 900ms cubic-bezier(.2,.9,.3,1);
+    will-change: transform;
+  }
+
+  .item {
+    width:100%;
+    height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    flex-direction:column;
+    font-size:22px;
+  }
+  .sign {
+    font-size:36px;
+  }
+  .sign-name {font-size:12px;color:var(--muted)}
+
+  .controls{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:8px;
+  }
+
+  button.primary{
+    background:linear-gradient(90deg,var(--accent),#fb923c);
+    border:none;padding:10px 18px;border-radius:10px;color:#07122a;font-weight:700;
+    box-shadow: 0 6px 18px rgba(245,158,11,0.12);
+    cursor:pointer;
+  }
+  button.secondary{
+    background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:var(--muted);
+    cursor:pointer;
+  }
+  .result {
+    margin-top:14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+    min-height:64px;
+  }
+  .result .title {font-weight:700;margin:0 0 6px 0}
+  .result .text {margin:0;color:var(--muted);font-size:13px}
+
+  .small {font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+  /* Mobile adjustments */
+  @media (max-width:380px){
+    .reel{width:72px;height:100px}
+    .item{height:100px}
+  }
+</style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Horoscope slots">
+    <header>
+      <div class="logo">♈</div>
+      <div>
+        <h1>Horoscope Slots</h1>
+        <p class="lead">Spin the slots to reveal today's horoscope</p>
+      </div>
+    </header>
+
+    <div class="slots" id="slots">
+      <!-- Three reels -->
+      <div class="reel" data-index="0"><div class="strip"></div></div>
+      <div class="reel" data-index="1"><div class="strip"></div></div>
+      <div class="reel" data-index="2"><div class="strip"></div></div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="spinBtn">SPIN</button>
+      <button class="secondary" id="randomBtn" title="Generate random horoscope">Random</button>
+    </div>
+
+    <div class="result" id="result">
+      <p class="title" id="resultTitle">Ready to spin ✨</p>
+      <p class="text" id="resultText">Press SPIN to reveal a bite-sized horoscope for the sign(s) the slots land on.</p>
+    </div>
+
+    <p class="small">Tip: landing the same sign across all three reels shows an "amplified" message.</p>
+  </div>
+
+<script>
+/* --- Horoscope data --- */
+const ZODIAC = [
+  {key:'aries', emoji:'♈', name:'Aries', short:'Bold energy today. Take the lead.'},
+  {key:'taurus', emoji:'♉', name:'Taurus', short:'Slow and steady wins the day.'},
+  {key:'gemini', emoji:'♊', name:'Gemini', short:'Curiosity pays off—talk to someone new.'},
+  {key:'cancer', emoji:'♋', name:'Cancer', short:'Lean on your circle; feelings matter.'},
+  {key:'leo', emoji:'♌', name:'Leo', short:'Shine bright—a creative spark arrives.'},
+  {key:'virgo', emoji:'♍', name:'Virgo', short:'Details help you finish something important.'},
+  {key:'libra', emoji:'♎', name:'Libra', short:'Seek balance; a small compromise helps.'},
+  {key:'scorpio', emoji:'♏', name:'Scorpio', short:'Depth and focus lead to insight.'},
+  {key:'sagittarius', emoji:'♐', name:'Sagittarius', short:'Adventure calls—try a tiny change.'},
+  {key:'capricorn', emoji:'♑', name:'Capricorn', short:'Work steadily—progress builds momentum.'},
+  {key:'aquarius', emoji:'♒', name:'Aquarius', short:'Your idea could help the group.'},
+  {key:'pisces', emoji:'♓', name:'Pisces', short:'Creativity and compassion blend well.'}
+];
+
+/* --- Utilities --- */
+function randInt(max){ return Math.floor(Math.random()*max); }
+function pickRandom() { return ZODIAC[randInt(ZODIAC.length)]; }
+
+/* --- Build reel content (repeating list so it can spin) --- */
+const REPEAT = 5; // how many times list repeats for long strip
+const reels = document.querySelectorAll('.reel');
+
+reels.forEach((reelEl, idx) => {
+  const strip = reelEl.querySelector('.strip');
+  strip.innerHTML = ''; // clear
+  // create repeated sequence of items
+  for (let r=0;r<REPEAT;r++){
+    ZODIAC.forEach(z => {
+      const item = document.createElement('div');
+      item.className = 'item';
+      item.innerHTML = `<div class="sign">${z.emoji}</div><div class="sign-name">${z.name}</div>`;
+      strip.appendChild(item);
+    });
+  }
+});
+
+/* Each item height (read after DOM layout) */
+const sampleItem = document.querySelector('.item');
+const ITEM_HEIGHT = sampleItem.getBoundingClientRect().height;
+
+/* Spin logic */
+let spinning = false;
+const spinBtn = document.getElementById('spinBtn');
+const randomBtn = document.getElementById('randomBtn');
+const resultTitle = document.getElementById('resultTitle');
+const resultText = document.getElementById('resultText');
+
+function spinOnce(){
+  if (spinning) return;
+  spinning = true;
+  spinBtn.disabled = true;
+  resultTitle.textContent = 'Spinning...';
+  resultText.textContent = 'Gazing at the stars ✨';
+
+  // For each reel, compute a target index somewhere inside repeated list
+  const finalSigns = [];
+  reels.forEach((reelEl, i) => {
+    const strip = reelEl.querySelector('.strip');
+
+    // random target sign index from 0..ZODIAC.length-1
+    const signIndex = randInt(ZODIAC.length);
+    finalSigns.push(signIndex);
+
+    // compute which repeated block to land on (use a later block to ensure spin)
+    const block = 2 + randInt(2); // choose block 2..3 (so it travels down)
+    const targetPosition = (block * ZODIAC.length + signIndex) * ITEM_HEIGHT;
+
+    // add extra offset so reels stop at slightly different times
+    const duration = 900 + i*250 + (randInt(300));
+
+    // apply transform
+    // Use setTimeout to stagger start a tiny bit
+    setTimeout(() => {
+      strip.style.transition = `transform ${duration}ms cubic-bezier(.2,.9,.3,1)`;
+      // negative translateY to move strip up so the target item aligns in view
+      strip.style.transform = `translateY(-${targetPosition}px)`;
+    }, i * 120);
+  });
+
+  // When all reels finished (approx max duration), compute result
+  const maxDuration = 900 + (reels.length-1)*250 + 300 + reels.length*120;
+  setTimeout(() => {
+    // determine landed signs by reading transform of each strip
+    const landed = Array.from(reels).map(reelEl => {
+      const strip = reelEl.querySelector('.strip');
+      // compute index by rounding transform/ITEM_HEIGHT
+      const computed = Math.abs(parseFloat(strip.style.transform.replace('translateY(', '').replace('px)','')) || 0);
+      const idx = Math.round(computed / ITEM_HEIGHT) % ZODIAC.length;
+      return ZODIAC[idx];
+    });
+
+    showResult(landed);
+    spinning = false;
+    spinBtn.disabled = false;
+  }, maxDuration + 60);
+}
+
+function showResult(landed){
+  // If all three the same -> amplified message
+  const names = landed.map(l => l.name);
+  const same = names.every(n => n === names[0]);
+
+  if (same){
+    const z = landed[0];
+    resultTitle.textContent = `${z.emoji} ${z.name} — Amplified`;
+    resultText.textContent = `${z.short} Today the energy is strong for ${z.name.toLowerCase()}. Double down on what matters and let confidence lead.`;
+  } else {
+    // compose combined message from three signs
+    resultTitle.textContent = `${landed[0].emoji} ${landed[1].emoji} ${landed[2].emoji}`;
+    const combine = landed.map(l => `${l.name}: ${l.short}`).join(' — ');
+    resultText.textContent = combine;
+  }
+}
+
+/* Random button sets reels to random sign instantly and shows horoscope */
+randomBtn.addEventListener('click', () => {
+  if (spinning) return;
+  const signs = [pickRandom(), pickRandom(), pickRandom()];
+  // instantly move strips to position without transition
+  reels.forEach((reelEl, i) => {
+    const strip = reelEl.querySelector('.strip');
+    strip.style.transition = 'none';
+    const block = 2;
+    const signIndex = ZODIAC.findIndex(z => z.key === signs[i].key);
+    const pos = (block * ZODIAC.length + signIndex) * ITEM_HEIGHT;
+    strip.style.transform = `translateY(-${pos}px)`;
+  });
+  showResult(signs);
+});
+
+/* Spin button */
+spinBtn.addEventListener('click', spinOnce);
+
+/* Accessibility: allow space/enter on button focus */
+spinBtn.addEventListener('keyup', (e) => { if (e.key === 'Enter' || e.key === ' ') spinOnce(); });
+
+/* Init: center reels on a random starting row */
+(function initStart(){
+  reels.forEach((reelEl,i) => {
+    const strip = reelEl.querySelector('.strip');
+    const block = 2;
+    const signIndex = randInt(ZODIAC.length);
+    const pos = (block * ZODIAC.length + signIndex) * ITEM_HEIGHT;
+    strip.style.transform = `translateY(-${pos}px)`;
+  });
+})();
+</script>
+</body>
+</html>
