@@ -1,2 +1,2 @@
-# Horoscopes-skots
+# Horoscopes-slots
 horoscope slots app
