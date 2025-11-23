@@ -1,0 +1,26 @@
+import { useState } from "react";
+import { View, TextInput, Text, TouchableOpacity } from "react-native";
+
+export default function SimpleSignup({ onSignup }) {
+  const [email, setEmail] = useState("");
+
+  return (
+    <View style={{ padding:20 }}>
+      <Text style={{ fontSize:24 }}>Quick Email Signup</Text>
+
+      <TextInput
+        placeholder="Enter any email"
+        value={email}
+        onChangeText={setEmail}
+        style={{ borderWidth:1, padding:10, marginTop:10 }}
+      />
+
+      <TouchableOpacity
+        onPress={() => onSignup(email)}
+        style={{ backgroundColor:"#915CDE", padding:15, marginTop:20 }}
+      >
+        <Text style={{ color:"#fff", textAlign:"center" }}>Start Playing</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
