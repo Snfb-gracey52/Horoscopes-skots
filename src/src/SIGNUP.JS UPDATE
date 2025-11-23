@@ -1,0 +1,13 @@
+function quickSignup() {
+    const email = document.getElementById("emailInput").value.trim();
+
+    if (!email || !email.includes("@")) {
+        document.getElementById("signupStatus").innerText = "Enter valid email";
+        return;
+    }
+
+    localStorage.setItem("userEmail", email);
+
+    document.getElementById("signupBox").style.display = "none";
+    document.getElementById("gameBox").style.display = "block";
+}
