@@ -1,0 +1,8 @@
+function simpleSignup() {
+    let name = document.getElementById("nameInput").value.trim();
+    if (!name) { alert("Enter your name!"); return; }
+
+    document.getElementById("signupBox").style.display = "none";
+    document.getElementById("welcome").textContent = "Welcome, " + name;
+    document.getElementById("gameArea").style.display = "block";
+}
