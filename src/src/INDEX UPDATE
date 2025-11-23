@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Horoscope Slots</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Horoscope Slots 🔮</h1>
+
+<div id="signupBox">
+    <h2>Start Your Journey</h2>
+    <input id="emailInput" type="text" placeholder="Enter any email to play">
+    <button onclick="quickSignup()">Sign Up</button>
+    <p id="signupStatus"></p>
+</div>
+
+<div id="gameBox" style="display:none;">
+    <div class="slot-container">
+        <img id="reel1" class="reel">
+        <img id="reel2" class="reel">
+        <img id="reel3" class="reel">
+    </div>
+
+    <button id="spinBtn" onclick="spin()">SPIN</button>
+    <p id="result"></p>
+
+    <button id="bonusBtn" onclick="bonusSpin()">BONUS REEL</button>
+</div>
+
+<script src="signup.js"></script>
+<script src="slot.js"></script>
+
+<footer>
+<p>Copyright SNFB BY Grace 2026-2027</p>
+</footer>
+
+</body>
+</html>
